@@ -19,7 +19,6 @@ public class User {
     private String lastName;
 
     @Column(unique = true)
-    @NotBlank(message = "Email is mandatory")
     private String email;
     private String password;
 
