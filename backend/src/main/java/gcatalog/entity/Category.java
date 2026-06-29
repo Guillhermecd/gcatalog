@@ -1,6 +1,7 @@
 package gcatalog.entity;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "category")
+@Table(name = "tb_category")
 public class Category implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -17,6 +18,7 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private Instant createdAt;
 
     public Category() {
     }
@@ -40,6 +42,14 @@ public class Category implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
