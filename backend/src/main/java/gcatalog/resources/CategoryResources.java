@@ -1,18 +1,26 @@
 package gcatalog.resources;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import gcatalog.dto.CategoryDTO;
 import gcatalog.services.CategoryServices;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping(value = "/categories")
@@ -22,21 +30,41 @@ public class CategoryResources {
     private CategoryServices categoryServices;
 
     @GetMapping
-    public ResponseEntity<List<CategoryDTO>> findAll() {
-        List<CategoryDTO> list = categoryServices.findAll();
+    public ResponseEntity<Page<CategoryDTO>> findAll(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "linesPerPage", defaultValue = "12") Integer linesPerPage,
+            @RequestParam(value = "orderBy", defaultValue = "name") String orderBy,
+            @RequestParam(value = "direction", defaultValue = "ASC") String direction) {
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+        Page<CategoryDTO> list = categoryServices.findAllPaged(pageRequest);
         return ResponseEntity.ok().body(list);
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<CategoryDTO> findById(@PathVariable Long id) {
         CategoryDTO dto = categoryServices.findById(id);
         return ResponseEntity.ok().body(dto);
     }
 
     @PostMapping
-    public String createCategory(@RequestBody CategoryDTO categoryDTO) {
-        // Call the service method to create the category
-        categoryServices.createCategory(categoryDTO);
-        return "Category created successfully!";
+    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO) {
+        categoryDTO = categoryServices.createCategory(categoryDTO);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(categoryDTO.getId())
+                .toUri();
+        return ResponseEntity.created(uri).body(categoryDTO);
     }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @RequestBody CategoryDTO categoryDTO) {
+        categoryDTO = categoryServices.updateCategory(id, categoryDTO);
+        return ResponseEntity.ok().body(categoryDTO);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
+        categoryServices.deleteCategory(id);
+        return ResponseEntity.ok().body("Deleted category with id: " + id);
+    }
+
 }

@@ -24,10 +24,10 @@ public class Product {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+    private Instant date;
     private Double price;
     private String imgUrl;
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-    private Instant date;
 
     @ManyToMany
     @JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
@@ -36,13 +36,13 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String name, String description, Double price, String imgUrl) {
+    public Product(Long id, String name, String description, Instant date, Double price, String imgUrl) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.date = date;
         this.price = price;
         this.imgUrl = imgUrl;
-        this.date = Instant.now();
 
     }
 

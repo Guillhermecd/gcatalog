@@ -1,3 +1,9 @@
+package gcatalog.dto;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+
 import gcatalog.entity.Product;
 
 public class ProductDTO {
@@ -5,23 +11,36 @@ public class ProductDTO {
     private Long id;
     private String name;
     private String description;
+    private Instant date;
     private Double price;
+    private String imgUrl;
+
+    private List<CategoryDTO> categories = new ArrayList<>();
 
     public ProductDTO() {
     }
 
-    public ProductDTO(Long id, String name, String description, Double price) {
+    public ProductDTO(Long id, String name, String description, Instant date, Double price, String imgUrl) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.date = date;
         this.price = price;
+        this.imgUrl = imgUrl;
     }
 
     public ProductDTO(Product entity) {
         this.id = entity.getId();
         this.name = entity.getName();
         this.description = entity.getDescription();
+        this.date = entity.getDate();
         this.price = entity.getPrice();
+        this.imgUrl = entity.getImgUrl();
+    }
+
+    public ProductDTO(Product entity, List<CategoryDTO> categories) {
+        this(entity);
+        categories.forEach(cat -> this.categories.add(cat));
     }
 
     public Long getId() {
@@ -54,5 +73,25 @@ public class ProductDTO {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public List<CategoryDTO> getCategories() {
+        return categories;
+    }
+
+    public Instant getDate() {
+        return date;
+    }
+
+    public void setDate(Instant date) {
+        this.date = date;
     }
 }

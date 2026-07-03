@@ -56,3 +56,5 @@ public class StandardError {
     public void setPath(String requestURI) {
         this.path = requestURI;
     }
+
+}
