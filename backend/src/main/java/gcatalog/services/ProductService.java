@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import gcatalog.entity.Category;
 import gcatalog.entity.Product;
 import gcatalog.repositories.CategoryRepository;
 import gcatalog.repositories.ProductRepository;
+import gcatalog.services.exceptions.DatabaseException;
 import gcatalog.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -61,11 +64,12 @@ public class ProductService {
 
     @Transactional
     public void deleteProduct(Long id) {
-        Optional<Product> optionalProduct = productRepository.findById(id);
-        if (optionalProduct.isPresent()) {
+        try {
             productRepository.deleteById(id);
-        } else {
+        } catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException("Entity not found");
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Integrity violation");
         }
     }
 

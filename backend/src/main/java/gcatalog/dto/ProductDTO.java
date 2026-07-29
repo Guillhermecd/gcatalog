@@ -3,7 +3,9 @@ package gcatalog.dto;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import gcatalog.entity.Category;
 import gcatalog.entity.Product;
 
 public class ProductDTO {
@@ -38,7 +40,7 @@ public class ProductDTO {
         this.imgUrl = entity.getImgUrl();
     }
 
-    public ProductDTO(Product entity, List<CategoryDTO> categories) {
+    public ProductDTO(Product entity, Set<Category> categories) {
         this(entity);
         categories.forEach(cat -> this.categories.add(cat));
     }
