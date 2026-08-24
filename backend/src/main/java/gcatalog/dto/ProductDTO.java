@@ -32,17 +32,20 @@ public class ProductDTO {
     }
 
     public ProductDTO(Product entity) {
+        this(entity, entity.getCategories());
+    }
+
+    public ProductDTO(Product entity, Set<Category> categories) {
         this.id = entity.getId();
         this.name = entity.getName();
         this.description = entity.getDescription();
         this.date = entity.getDate();
         this.price = entity.getPrice();
         this.imgUrl = entity.getImgUrl();
-    }
 
-    public ProductDTO(Product entity, Set<Category> categories) {
-        this(entity);
-        categories.forEach(cat -> this.categories.add(cat));
+        if (categories != null) {
+            categories.forEach(cat -> this.categories.add(new CategoryDTO(cat)));
+        }
     }
 
     public Long getId() {

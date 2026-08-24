@@ -39,7 +39,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
         return new ProductDTO(product);
     }
 
@@ -56,6 +56,7 @@ public class ProductService {
         if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
             copyDtoToEntity(productDTO, product);
+            product = productRepository.save(product);
             return new ProductDTO(product);
         } else {
             throw new ResourceNotFoundException("Entity not found");
