@@ -15,7 +15,9 @@
     <name>gcatalog</name>
     
     <properties>
-        <java.version>21</java.version>
+        <java.version>25</java.version>
+        <lombok.version>1.18.46</lombok.version>
+        <byte-buddy.version>1.18.12-jdk5</byte-buddy.version>
     </properties>
     
     <dependencies>
