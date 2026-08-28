@@ -1,5 +1,8 @@
 package gcatalog.dto;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import gcatalog.entity.User;
 
 public class UserDTO {
@@ -8,6 +11,8 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String email;
+
+    Set<RoleDTO> roles = new HashSet<>();
 
     public UserDTO() {
     }
@@ -24,6 +29,7 @@ public class UserDTO {
         this.firstName = entity.getFirstName();
         this.lastName = entity.getLastName();
         this.email = entity.getEmail();
+        entity.getRoles().forEach(role -> this.roles.add(new RoleDTO(role)));
     }
 
     public Long getId() {
@@ -58,4 +64,7 @@ public class UserDTO {
         this.email = email;
     }
 
+    public Set<RoleDTO> getRoles() {
+        return roles;
+    }
 }
