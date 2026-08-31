@@ -6,5 +6,9 @@ public class DatabaseException extends RuntimeException {
     public DatabaseException(String message) {
         super(message);
     }
-    
+
+    public Object getBindingResult() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }
