@@ -7,13 +7,22 @@ import java.util.Set;
 
 import gcatalog.entity.Category;
 import gcatalog.entity.Product;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 public class ProductDTO {
 
     private Long id;
+    @Size(min = 5, max = 60, message = "Name must be between 5 and 60 characters")
+    @NotBlank(message = "Name must not be empty")
     private String name;
+    @NotBlank(message = "Description must not be empty")
     private String description;
+    @PastOrPresent(message = "Date must be in the past or present")
     private Instant date;
+    @Positive(message = "Price must be positive")
     private Double price;
     private String imgUrl;
 

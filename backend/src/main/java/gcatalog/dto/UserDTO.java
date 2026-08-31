@@ -4,12 +4,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 import gcatalog.entity.User;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 
 public class UserDTO {
 
     private Long id;
+
+    @NotEmpty(message = "First name must not be empty")
     private String firstName;
+    @NotEmpty(message = "Last name must not be empty")
     private String lastName;
+    @NotEmpty(message = "Email must not be empty")
+    @Email(message = "Email should be valid")
     private String email;
 
     Set<RoleDTO> roles = new HashSet<>();

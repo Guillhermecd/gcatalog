@@ -11,6 +11,9 @@ public class RoleDTO {
 
     private Set<UserDTO> users = new HashSet<>();
 
+    public RoleDTO() {
+    }
+
     public RoleDTO(Role role) {
     }
 

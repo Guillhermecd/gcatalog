@@ -7,11 +7,13 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import gcatalog.dto.RoleDTO;
 import gcatalog.dto.UserDTO;
+import gcatalog.dto.UserInsertDTO;
 import gcatalog.entity.Role;
 import gcatalog.entity.User;
 import gcatalog.repositories.RoleRepository;
@@ -22,6 +24,9 @@ import gcatalog.services.exceptions.ResourceNotFoundException;
 @Service
 
 public class UserService {
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepository userRepository;
@@ -42,10 +47,11 @@ public class UserService {
         return new UserDTO(entity);
     }
 
-    public UserDTO createUser(UserDTO userDTO) {
+    public UserDTO createUser(UserInsertDTO userDTO) {
         User user = new User();
         copyDtoToEntity(userDTO, user);
         user = userRepository.save(user);
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         return new UserDTO(user);
     }
 
@@ -77,6 +83,9 @@ public class UserService {
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
+        if (userDTO instanceof UserInsertDTO) {
+            user.setPassword(((UserInsertDTO) userDTO).getPassword());
+        }
 
         user.getRoles().clear();
         for (RoleDTO roleDTO : userDTO.getRoles()) {
