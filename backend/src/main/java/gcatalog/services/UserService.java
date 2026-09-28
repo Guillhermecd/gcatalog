@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import gcatalog.dto.RoleDTO;
 import gcatalog.dto.UserDTO;
 import gcatalog.dto.UserInsertDTO;
+import gcatalog.dto.UserUpdateDTO;
 import gcatalog.entity.Role;
 import gcatalog.entity.User;
 import gcatalog.repositories.RoleRepository;
@@ -56,7 +57,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO updateUser(Long id, UserDTO userDTO) {
+    public UserDTO updateUser(Long id, UserUpdateDTO userDTO) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();

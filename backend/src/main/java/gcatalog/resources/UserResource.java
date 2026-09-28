@@ -18,7 +18,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import gcatalog.dto.UserDTO;
 import gcatalog.dto.UserInsertDTO;
+import gcatalog.dto.UserUpdateDTO;
 import gcatalog.services.UserService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -48,9 +50,9 @@ public class UserResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        UserDTO dto = userService.updateUser(id, userDTO);
-        return ResponseEntity.ok().body(dto);
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO userDTO) {
+        UserDTO newDto = userService.updateUser(id, userDTO);
+        return ResponseEntity.ok().body(newDto);
     }
 
     @DeleteMapping(value = "/{id}")
